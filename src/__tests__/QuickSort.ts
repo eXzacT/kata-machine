@@ -1,4 +1,4 @@
-import quick_sort from "@code/QuickSort";
+import quick_sort from "@code/typescript/QuickSort";
 
 test("quick-sort", function () {
     const arr = [9, 3, 7, 4, 69, 420, 42];

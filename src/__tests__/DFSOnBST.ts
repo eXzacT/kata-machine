@@ -1,4 +1,4 @@
-import dfs from "@code/DFSOnBST";
+import dfs from "@code/typescript/DFSOnBST";
 import { tree } from "./tree";
 
 test("DFS on BST", function () {

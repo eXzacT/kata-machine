@@ -1,4 +1,4 @@
-import compare from "@code/CompareBinaryTrees";
+import compare from "@code/typescript/CompareBinaryTrees";
 import { tree, tree2 } from "./tree";
 
 test("Compare Binary Trees", function () {

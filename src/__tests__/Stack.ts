@@ -1,4 +1,4 @@
-import Stack from "@code/Stack";
+import Stack from "@code/typescript/Stack";
 
 test("stack", function () {
     const list = new Stack<number>();

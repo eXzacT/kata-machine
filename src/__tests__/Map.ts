@@ -1,6 +1,6 @@
-import MyMap from "@code/Map";
+import MyMap from "@code/typescript/Map";
 
-test("Map", function() {
+test("Map", function () {
     const map = new MyMap<string, number>();
     map.set("foo", 55);
     expect(map.size()).toEqual(1);

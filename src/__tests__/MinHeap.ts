@@ -1,4 +1,4 @@
-import MinHeap from "@code/MinHeap";
+import MinHeap from "@code/typescript/MinHeap";
 
 test("min heap", function () {
     const heap = new MinHeap();

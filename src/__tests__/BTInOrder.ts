@@ -1,4 +1,4 @@
-import bt_in_order from "@code/BTInOrder";
+import bt_in_order from "@code/typescript/BTInOrder";
 import { tree } from "./tree";
 
 test("In order", function () {
