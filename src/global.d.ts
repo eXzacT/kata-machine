@@ -5,7 +5,7 @@ declare type Point = {
 
 declare type ListNode<T> = {
     value: T,
-    next?: ListNode<T>,
+    nxt?: ListNode<T>,
     prev?: ListNode<T>,
 }
 
