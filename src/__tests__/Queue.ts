@@ -4,6 +4,7 @@ test("queue", function () {
     const list = new Queue<number>();
 
     list.enqueue(5);
+    expect(list.peek()).toEqual(5);
     list.enqueue(7);
     list.enqueue(9);
 
@@ -25,7 +26,8 @@ test("queue", function () {
 
     // just wanted to make sure that I could not blow up myself when i remove
     // everything
-    list.enqueue(69);
-    expect(list.peek()).toEqual(69);
+
+    list.enqueue(5);
     expect(list.length).toEqual(1);
+    expect(list.peek()).toEqual(5);
 });

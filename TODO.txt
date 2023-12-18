@@ -1,0 +1,19 @@
+TODO
+Linked list:
+Recursive insertion and traversal linked list
+Reverse a Doubly linked list using recursion
+Delete a linked list using recursion
+Print alternate nodes of a linked list using recursion
+Recursive approach for alternating split of Linked List
+Find middle of singly linked list Recursively
+
+BinaryTrees:
+Print all leaf nodes of a Binary Tree from left to right
+Leaf nodes from Preorder of a Binary Search Tree (Using Recursion)
+Construct a binary search tree from its preorder traversal and then print all leaf nodes
+
+Sorting Algorithms:
+Recursive Bubble Sort
+Recursive Insertion Sort
+Implement the merge sort algorithm using recursion
+Implement the quick sort algorithm using recursion
