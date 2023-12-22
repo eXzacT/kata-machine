@@ -9,8 +9,11 @@ export default class DoublyLinkedList<T> {
         this.tail = undefined;
     }
 
-    private createNode(item: T, prev?: ListNode<T>, nxt?: ListNode<T>)
-        : ListNode<T> {
+    private createNode(
+        item: T,
+        prev?: ListNode<T>,
+        nxt?: ListNode<T>,
+    ): ListNode<T> {
         return { value: item, prev, nxt };
     }
 
