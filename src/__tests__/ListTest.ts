@@ -42,20 +42,16 @@ export function test_list(list: List<number>): void {
     list.insertAt(9, 2);
     expect(list.get(2)).toEqual(9);
     list.append(10);
-    list.append(10);
-    list.append(10);
-    list.append(10);
-    list.append(10);
-    list.append(10);
-    list.append(10);
-    list.append(4);
-    list.append(4);
-    list.append(3);
-    list.append(3);
-    list.append(3);
     list.append(2);
     list.prepend(1);
     expect(list.get(0)).toEqual(1);
     list.append(7);
     expect(list.get(list.length - 1)).toEqual(7);
+    list.reverse()
+    expect(list.get(0)).toEqual(7)
+    expect(list.removeAt(list.length - 1)).toEqual(1)
+    expect(list.removeAt(list.length - 1)).toEqual(9)
+    list.reverseRec()
+    expect(list.get(list.length - 1)).toEqual(7)
+    expect(list.get(0)).toEqual(5)
 }

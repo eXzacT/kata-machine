@@ -126,4 +126,25 @@ export default class DoublyLinkedList<T> {
         }
         return undefined;
     }
+
+    reverse(): void {
+        let curr = this.head;
+        for (let i = 0; i < this.length; i++) {
+            [curr!.prev, curr!.nxt] = [curr!.nxt, curr!.prev];
+            curr = curr!.prev;
+        }
+        [this.tail, this.head] = [this.head, this.tail];
+    }
+
+    reverseRec(): void {
+        function helper(curr: ListNode<T> | undefined) {
+            if (!curr) {
+                return
+            }
+            [curr.prev, curr.nxt] = [curr.nxt, curr.prev];
+            helper(curr.prev)
+        }
+        helper(this.head);
+        [this.tail, this.head] = [this.head, this.tail];
+    }
 }

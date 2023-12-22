@@ -118,4 +118,27 @@ export default class SinglyLinkedList<T> {
         }
         return undefined;
     }
+
+    reverse() {
+        let prev = undefined;
+        let curr = this.head;
+        while (curr) {
+            const tmp = curr.nxt
+            curr.nxt = prev;
+            [prev, curr] = [curr, tmp];
+        }
+        this.head = prev;
+    }
+
+    reverseRec() {
+        function helper(curr: ListNode<T> | undefined, prev: ListNode<T> | undefined): ListNode<T> | undefined {
+            if (!curr) {
+                return prev;
+            }
+            const tmp = curr.nxt;
+            curr.nxt = prev;
+            return helper(tmp, curr);
+        }
+        this.head = helper(this.head, undefined);
+    }
 }
