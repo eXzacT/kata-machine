@@ -47,11 +47,16 @@ export function test_list(list: List<number>): void {
     expect(list.get(0)).toEqual(1);
     list.append(7);
     expect(list.get(list.length - 1)).toEqual(7);
-    list.reverse()
-    expect(list.get(0)).toEqual(7)
-    expect(list.removeAt(list.length - 1)).toEqual(1)
-    expect(list.removeAt(list.length - 1)).toEqual(9)
-    list.reverseRec()
-    expect(list.get(list.length - 1)).toEqual(7)
-    expect(list.get(0)).toEqual(5)
+
+    list.reverse();
+    expect(list.get(0)).toEqual(7);
+    expect(list.removeAt(list.length - 1)).toEqual(1);
+    expect(list.removeAt(list.length - 1)).toEqual(9);
+    list.reverseRec();
+    expect(list.get(list.length - 1)).toEqual(7);
+    expect(list.get(0)).toEqual(5);
+
+    list.deleteRec();
+    expect(list.length).toEqual(0);
+    expect(() => list.get(0)).toThrow();
 }

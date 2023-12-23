@@ -1,10 +1,16 @@
-import dfs from "@code/typescript/DFSOnBST";
+import { dfs_iter, dfs_rec } from "@code/typescript/DFSOnBST";
 import { tree } from "./tree";
 
 test("DFS on BST", function () {
-    expect(dfs(tree, 45)).toEqual(true);
-    expect(dfs(tree, 7)).toEqual(true);
-    expect(dfs(tree, 69)).toEqual(false);
+    expect(dfs_iter(tree, 45)).toEqual(true);
+    expect(dfs_iter(tree, 7)).toEqual(true);
+    expect(dfs_iter(tree, 69)).toEqual(false);
+});
+
+test("DFS on BST rec", function () {
+    expect(dfs_rec(tree, 45)).toEqual(true);
+    expect(dfs_rec(tree, 7)).toEqual(true);
+    expect(dfs_rec(tree, 69)).toEqual(false);
 });
 
 

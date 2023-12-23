@@ -147,4 +147,21 @@ export default class DoublyLinkedList<T> {
         helper(this.head);
         [this.tail, this.head] = [this.head, this.tail];
     }
+
+    deleteRec() {
+        let curr = this.head;
+        function helper(node: ListNode<T> | undefined) {
+            if (!node) {
+                return;
+            }
+            node.prev = undefined;
+            const tmp = node.nxt;
+            node.nxt = undefined;
+
+            helper(tmp);
+        }
+        helper(curr);
+        this.length = 0;
+        this.head = this.tail = undefined;
+    }
 }

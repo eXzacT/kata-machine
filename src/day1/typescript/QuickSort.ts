@@ -38,7 +38,3 @@ export function quick_sort_v2(arr: number[]): void {
     }
     return helper(0, arr.length - 1);
 }
-
-const arr2 = [9, 3, 7, 4, 69, 420, 42, 2, 2, 3, 4, 1, 23, 9, 9, 81, 2, 3];
-quick_sort_v2(arr2);
-console.log(arr2)

@@ -141,4 +141,19 @@ export default class SinglyLinkedList<T> {
         }
         this.head = helper(this.head, undefined);
     }
+
+    deleteRec() {
+        let curr = this.head;
+        function helper(node: ListNode<T> | undefined) {
+            if (!node) {
+                return;
+            }
+            const tmp = node.nxt;
+            node.nxt = undefined;
+            helper(tmp);
+        }
+        helper(curr);
+        this.length = 0;
+        this.head = undefined;
+    }
 }

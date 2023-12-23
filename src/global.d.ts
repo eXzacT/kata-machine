@@ -19,6 +19,7 @@ declare interface List<T> {
     insertAt(item: T, idx: number): void;
     reverse(): void;
     reverseRec(): void;
+    deleteRec(): void;
 }
 
 declare type CompleteGraphEdge = { from: number; to: number; weight: number };

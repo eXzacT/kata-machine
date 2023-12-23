@@ -1,8 +1,8 @@
-import bt_pre_order from "@code/typescript/BTPreOrder";
+import pre_order from "@code/typescript/BTPreOrder";
 import { tree } from "./tree";
 
-test("Pre order", function () {
-    expect(bt_pre_order(tree)).toEqual([
+test("Pre order search", function () {
+    expect(pre_order(tree)).toEqual([
         20,
         10,
         5,
@@ -15,5 +15,3 @@ test("Pre order", function () {
         100,
     ]);
 });
-
-
