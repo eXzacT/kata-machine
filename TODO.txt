@@ -1,6 +1,2 @@
-Recursive Insertion Sort
-Implement the merge sort algorithm using recursion
-
-
 Tree balancing, deleting, inserting, redblack, AVL
 fibonacci heap
