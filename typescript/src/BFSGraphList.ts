@@ -1,6 +1,6 @@
 import Queue from "./Queue";
 
-export default function bfs(graph: WeightedAdjacencyMatrix, source: number, needle: number): number[] {
+export default function bfs(graph: WeightedAdjacencyList, source: number, needle: number): number[] {
     const seen = new Array(graph.length).fill(false);
     const prev = new Array(graph.length).fill(-1);
     seen[source] = true;
@@ -13,17 +13,17 @@ export default function bfs(graph: WeightedAdjacencyMatrix, source: number, need
         if (curr === needle) {
             break;
         }
-
         const adjs = graph[curr];
         for (let i = 0; i < adjs.length; i++) {
-            if (adjs[i] !== 0 && !seen[i]) {
-                seen[i] = true;
-                prev[i] = curr;
-                q.enqueue(i);
+            const nxt = adjs[i].to
+            if (!seen[nxt]) {
+                seen[nxt] = true;
+                prev[nxt] = curr;
+                q.enqueue(nxt)
             }
         }
     }
-    if (prev[needle] === -1) {
+    if (prev[needle] == -1) {
         return [];
     }
 
@@ -33,6 +33,5 @@ export default function bfs(graph: WeightedAdjacencyMatrix, source: number, need
         out.push(curr);
         curr = prev[curr];
     }
-
     return [source].concat(out.reverse());
 }
