@@ -20,9 +20,6 @@ test("LRU", function () {
     lru.update("foo", 69);
     expect(lru.get("bar")).toEqual(420);
     expect(lru.get("foo")).toEqual(69);
-
-    // shouldn't of been deleted, but since bar was get'd, bar was added to the
-    // front of the list, so baz became the end
     expect(lru.get("baz")).toEqual(undefined);
 });
 

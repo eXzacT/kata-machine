@@ -1,6 +1,6 @@
 import MinHeap from "./MinHeapTuple";
 
-export function dijkstra_list(source: number, needle: number, graph: WeightedAdjacencyList): number[] {
+export function dijkstra_list(graph: WeightedAdjacencyList, source: number, needle: number): number[] {
     const prev: number[] = new Array(graph.length).fill(-1);
     const dists: number[] = new Array(graph.length).fill(Infinity);
     const seen: boolean[] = new Array(graph.length).fill(false);
@@ -21,7 +21,12 @@ export function dijkstra_list(source: number, needle: number, graph: WeightedAdj
         }
     }
 
+
     const out: number[] = [];
+    if (prev[needle] === -1) {
+        return out;
+    }
+
     let curr = needle;
     while (prev[curr] !== -1) {
         out.push(curr);
@@ -31,11 +36,11 @@ export function dijkstra_list(source: number, needle: number, graph: WeightedAdj
     return out.reverse();
 }
 
-export function dijkstra_list_v2(source: number, needle: number, graph: WeightedAdjacencyList): number[] {
+export function dijkstra_list_v2(graph: WeightedAdjacencyList, source: number, needle: number): number[] {
     const dists: number[] = new Array(graph.length).fill(Infinity);
     const seen: boolean[] = new Array(graph.length).fill(false);
-    const paths: number[][] = new Array(graph.length);
-    paths[source] = [0];
+    const paths: number[][] = new Array(graph.length).fill([]);
+    paths[source] = [source];
     dists[source] = 0;
 
     while (dists.some((dist, i) => dist !== Infinity && !seen[i])) {
@@ -47,21 +52,20 @@ export function dijkstra_list_v2(source: number, needle: number, graph: Weighted
             if (!seen[edge.to]) {
                 const dist = dists[curr] + edge.weight;
                 if (dist < dists[edge.to]) {
-                    paths[edge.to] = [...paths[curr], edge.to];
+                    paths[edge.to] = paths[curr].concat(edge.to);
                     dists[edge.to] = dist;
                 }
             }
         }
     }
-
     return paths[needle];
 }
 
-export function dijkstra_min_heap(source: number, needle: number, graph: WeightedAdjacencyList): number[] {
+export function dijkstra_min_heap(graph: WeightedAdjacencyList, source: number, needle: number): number[] {
     const seen: boolean[] = new Array(graph.length).fill(false);
     const dists: number[] = new Array(graph.length).fill(Infinity);
-    const paths: number[][] = new Array(graph.length);
-    paths[source] = [0];
+    const paths: number[][] = new Array(graph.length).fill([]);
+    paths[source] = [source];
     dists[source] = 0;
 
     const heap = new MinHeap();
@@ -79,7 +83,7 @@ export function dijkstra_min_heap(source: number, needle: number, graph: Weighte
                 const newDist = dist + edge.weight;
                 if (newDist < dists[edge.to]) {
                     dists[edge.to] = newDist;
-                    paths[edge.to] = [...paths[node], edge.to];
+                    paths[edge.to] = paths[node].concat(edge.to);
                     heap.push({ node: edge.to, dist: newDist });
                 }
             }
