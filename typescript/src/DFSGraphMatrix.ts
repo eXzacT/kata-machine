@@ -8,16 +8,45 @@ export function dfs_iter(graph: WeightedAdjacencyMatrix, source: number, needle:
             path.push(needle);
             return path;
         }
-        if (seen[curr]) {
-            continue;
+        if (!seen[curr]) {
+            seen[curr] = true;
+
+            const list = graph[curr]
+            for (let i = 0; i < list.length; i++) {
+                if (list[i] != 0) {
+                    stack.push([i, path.concat(curr)]);
+                }
+            }
+        }
+    }
+    return [];
+}
+
+export function dfs_iter_v2(graph: WeightedAdjacencyMatrix, source: number, needle: number): number[] {
+    const seen = new Array(graph.length).fill(false);
+    const stack: number[] = [source];
+    const path: number[] = []; // Single shared array unlike previous version
+
+    while (stack.length) {
+        const curr = stack.pop()!
+        // Keep popping verts that don't lead to this current vert as we already found they don't lead to the needle
+        while (path.length && graph[path[path.length - 1]][curr] === 0) {
+            path.pop();
         }
 
-        seen[curr] = true;
+        if (curr === needle) {
+            path.push(needle);
+            return path;
+        }
+        if (!seen[curr]) {
+            seen[curr] = true;
+            path.push(curr);
 
-        const list = graph[curr]
-        for (let i = 0; i < list.length; i++) {
-            if (list[i] != 0) {
-                stack.push([i, path.concat(curr)]);
+            const list = graph[curr]
+            for (let i = 0; i < list.length; i++) {
+                if (list[i] != 0) {
+                    stack.push(i);
+                }
             }
         }
     }

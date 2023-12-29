@@ -20,8 +20,6 @@ export function dfs(graph: WeightedAdjacencyList, source: number, needle: number
     return walk(source, new Array(graph.length).fill(false), []);
 }
 
-
-
 export function dfs_v2(graph: WeightedAdjacencyList, source: number, needle: number): number[] {
     function walk(curr: number, path: number[]): boolean {
         if (seen[curr]) {
@@ -82,13 +80,38 @@ export function dfs_iter(graph: WeightedAdjacencyList, source: number, needle: n
             path.push(curr);
             return path;
         }
-        if (seen[curr]) {
-            continue;
+        if (!seen[curr]) {
+            seen[curr] = true;
+            for (const edge of graph[curr]) {
+                stack.push([edge.to, path.concat(curr)]);
+            }
         }
+    }
+    return [];
+}
 
-        seen[curr] = true;
-        for (const edge of graph[curr]) {
-            stack.push([edge.to, path.concat(curr)]);
+export function dfs_iter_v2(graph: WeightedAdjacencyList, source: number, needle: number): number[] {
+    const seen = new Array(graph.length).fill(false);
+    const path: number[] = []; // Single shared path array
+    const stack: number[] = [source];
+
+    while (stack.length) {
+        const curr = stack.pop()!;
+        // Keep popping verts that don't lead to this current vert as we already found they don't lead to the needle
+        while (path.length && !graph[path[path.length - 1]].some(edge => edge.to === curr)) {
+            path.pop();
+        }
+        if (curr === needle) {
+            path.push(curr);
+            return path;
+        }
+        if (!seen[curr]) {
+            seen[curr] = true;
+            path.push(curr);
+
+            for (const edge of graph[curr]) {
+                stack.push(edge.to);
+            }
         }
     }
     return [];

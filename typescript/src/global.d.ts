@@ -26,6 +26,7 @@ declare type CompleteGraphEdge = { from: number; to: number; weight: number };
 declare type GraphEdge = { to: number; weight: number };
 declare type WeightedAdjacencyList = GraphEdge[][];
 declare type WeightedAdjacencyMatrix = number[][]; // A number means weight
+declare type HeapNode = { node: number; dist: number };
 
 declare type AdjacencyList = number[][];
 declare type AdjacencyMatrix = number[][]; // A 1 means connected

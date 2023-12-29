@@ -1,4 +1,4 @@
-import { dfs, dfs_v2, dfs_iter } from "../DFSGraphMatrix";
+import { dfs, dfs_v2, dfs_iter, dfs_iter_v2 } from "../DFSGraphMatrix";
 import { matrix2 } from "./graph";
 
 describe("DFS - graph", function () {
@@ -6,6 +6,7 @@ describe("DFS - graph", function () {
         { name: "dfs", func: dfs },
         { name: "dfs_v2", func: dfs_v2 },
         { name: "dfs_iter", func: dfs_iter },
+        { name: "dfs_iter_v2", func: dfs_iter_v2 },
     ];
 
     for (const test of tests) {

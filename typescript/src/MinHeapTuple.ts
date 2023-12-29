@@ -1,6 +1,7 @@
+declare type HeapNode = { node: number; dist: number };
 export default class MinHeap {
     public length: number;
-    public data: number[];
+    public data: HeapNode[];
 
     constructor() {
         this.length = 0;
@@ -23,12 +24,13 @@ export default class MinHeap {
         if (idx === 0) {
             return;
         }
-        const p = this.parent(idx);
-        const parentVal = this.data[p];
-        const val = this.data[idx];
 
-        if (val < parentVal) {
-            [this.data[idx], this.data[p]] = [parentVal, val];
+        const p = this.parent(idx);
+        const pNode = this.data[p];
+        const currNode = this.data[idx];
+
+        if (currNode.dist < pNode.dist) {
+            [this.data[p], this.data[idx]] = [currNode, pNode];
             this.heapifyUp(p);
         }
     }
@@ -37,29 +39,28 @@ export default class MinHeap {
         const lIdx = this.leftChild(idx);
         const rIdx = this.rightChild(idx);
 
+        //Reached the end
         if (lIdx >= this.length || rIdx >= this.length) {
             return;
         }
 
-        const smallerChildIdx = this.data[lIdx] > this.data[rIdx] ? rIdx : lIdx;
+        const smallerChildIdx = this.data[lIdx].dist > this.data[rIdx].dist ? rIdx : lIdx;
 
-        if (this.data[smallerChildIdx] < this.data[idx]) {
-            [this.data[idx], this.data[smallerChildIdx]] = [this.data[smallerChildIdx], this.data[idx]];
+        if (this.data[smallerChildIdx].dist < this.data[idx].dist) {
+            [this.data[smallerChildIdx], this.data[idx]] = [this.data[idx], this.data[smallerChildIdx]];
             this.heapifyDown(smallerChildIdx);
         }
     }
 
-
-    insert(value: number): void {
+    push(value: HeapNode): void {
         this.data.push(value);
         this.heapifyUp(this.length++);
     }
 
-    delete(): number {
+    pop(): HeapNode | null {
         if (this.length === 0) {
-            return -1;
+            return null;
         }
-
         const out = this.data[0];
         this.length--;
 
