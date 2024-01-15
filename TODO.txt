@@ -1,2 +1,10 @@
+topological sort
+
+
 Tree balancing, deleting, inserting, redblack, AVL
-fibonacci heap
+dijkstra with fibonacci heap, indexed heap, n-ary heap
+
+circular linked list
+
+min/max flows
+strongly connected components
