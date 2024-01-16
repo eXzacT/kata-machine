@@ -5,14 +5,14 @@ from common import time_execution
 test_cases = [
     ([1, 2, 3, 4, 5], [1, 2, 3, 4, 5]),
     ([5, 4, 3, 2, 1], [1, 2, 3, 4, 5]),
-    ([5, 9, 5, 1, 0], [0, 1, 5, 5, 9]),
+    ([9, 6, 21, 3, 2, 25, 1], [1, 2, 3, 6, 9, 21, 25]),
     ([], []),
     ([1], [1])
 ]
 
 
-@pytest.mark.parametrize("test_input,expected", test_cases)
 @time_execution
+@pytest.mark.parametrize("test_input,expected", test_cases)
 def test_sort_shell(test_input, expected):
     sort_shell(test_input)
     assert test_input == expected

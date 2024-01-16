@@ -1,5 +1,5 @@
 import pytest
-from src.filename import filename
+from src.sort_heap import sort_heap
 from common import time_execution
 
 test_cases = [
@@ -13,6 +13,6 @@ test_cases = [
 
 @time_execution
 @pytest.mark.parametrize("test_input,expected", test_cases)
-def test_filename(test_input, expected):
-    filename(test_input)
+def test_sort_heap(test_input, expected):
+    sort_heap(test_input)
     assert test_input == expected
