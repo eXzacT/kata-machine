@@ -1,46 +1,61 @@
-from collections import deque
-
-
 def topological_sort_dfs(graph: dict[int, list[int]]) -> list[int]:
-    visited = set()
-    topo_sorted = deque([])
+    UNVISITED = 0
+    VISITING = 1
+    VISITED = 2
 
-    def helper(v: int):
-        if v in visited:
-            return
+    visited = {v: UNVISITED for v in graph}
+    topo_sorted = []
+
+    def helper(v: int) -> bool:
+        if visited[v] == VISITED:
+            return True
+        if visited[v] == VISITING:  # Cycle
+            return False
+
+        visited[v] = VISITING
 
         for e in graph[v]:
-            helper(e)
+            if not helper(e):
+                return False
 
-        topo_sorted.appendleft(v)
-        visited.add(v)
+        visited[v] = VISITED
+        topo_sorted.append(v)
+        return True
 
     for v in graph:
-        helper(v)
+        if not helper(v):
+            return []  # There was a cycle so we can't topologically sort the graph
 
-    # If their lengths are not the same it means we can't possibly sort them topologically
-    return list(topo_sorted) if len(topo_sorted) == len(graph) else []
+    return topo_sorted[::-1]
 
 
 def topological_sort_dfs_v2(graph: dict[int, list[int]]) -> list[int]:
     visited = set()
+    current_path = set()
     topo_sorted = []
 
-    def helper(v: int):
+    def helper(v: int) -> bool:
         if v in visited:
-            return
+            return True
+        if v in current_path:  # Cycle
+            return False
+
+        current_path.add(v)
 
         for e in graph[v]:
-            helper(e)
+            if not helper(e):
+                return False
 
+        current_path.remove(v)
         topo_sorted.append(v)
         visited.add(v)
+        return True
 
     for v in graph:
-        helper(v)
+        if not helper(v):
+            return []  # There was a cycle so we can't topologically sort the graph
 
-    # If their lengths are not the same it means we can't possibly sort them topologically
-    return topo_sorted[::-1] if len(topo_sorted) == len(graph) else []
+    return topo_sorted[::-1]
 
 
 def topological_sort_bfs(graph: dict[int, list[int]]) -> list[int]:

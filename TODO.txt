@@ -1,6 +1,3 @@
-topological sort
-
-
 Tree balancing, deleting, inserting, redblack, AVL
 dijkstra with fibonacci heap, indexed heap, n-ary heap
 
