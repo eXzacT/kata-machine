@@ -1,6 +1,5 @@
 import pytest
 from src.is_tree import is_tree
-from common import time_execution
 
 graph1 = {'A': ['B'],
           'B': ['A', 'G'],
@@ -75,7 +74,6 @@ test_cases = [
 ]
 
 
-@time_execution
 @pytest.mark.parametrize("test_input,expected", test_cases)
 def test_is_tree(test_input, expected):
     assert is_tree(test_input) == expected

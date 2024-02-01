@@ -1,6 +1,5 @@
 import pytest
 from src.distance_k_tree import distance_k_tree_bfs, distance_k_tree_dfs
-from common import time_execution
 
 adjancency_list: dict[str, list[str]] = {
     'A': ['B', 'C', 'D'],
@@ -31,13 +30,11 @@ test_cases = [
 ]
 
 
-@time_execution
 @pytest.mark.parametrize("test_input,expected", test_cases)
 def test_distance_k_tree_bfs(test_input, expected):
     assert distance_k_tree_bfs(*test_input) == expected
 
 
-@time_execution
 @pytest.mark.parametrize("test_input,expected", test_cases)
 def test_distance_k_tree_dfs(test_input, expected):
     assert distance_k_tree_dfs(*test_input) == expected

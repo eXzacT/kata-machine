@@ -15,10 +15,8 @@ while True:
     # If there was a change run pytest
     if os.stat(file_path).st_mtime != current_mod_time:
         current_mod_time = os.stat(file_path).st_mtime
-        # Change the current working directory because pytest runs from it
-        os.chdir(os.path.join(justfile_dir))
-        subprocess.run('cmd /C "set PYTHONPATH={} && pytest -s src/__tests__/test_{}"'.format(
-            os.path.join(justfile_dir), filename), shell=True)
+        subprocess.run(
+            f"pytest -s src/__tests__/test_{filename}", shell=True)
 
     # Wait before checking again
     time.sleep(1)

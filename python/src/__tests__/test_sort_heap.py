@@ -1,6 +1,5 @@
 import pytest
 from src.sort_heap import sort_heap
-from common import time_execution
 
 test_cases = [
     ([1, 2, 3, 4, 5], [1, 2, 3, 4, 5]),
@@ -11,7 +10,6 @@ test_cases = [
 ]
 
 
-@time_execution
 @pytest.mark.parametrize("test_input,expected", test_cases)
 def test_sort_heap(test_input, expected):
     sort_heap(test_input)

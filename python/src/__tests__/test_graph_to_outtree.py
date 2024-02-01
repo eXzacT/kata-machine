@@ -1,6 +1,5 @@
 import pytest
 from src.graph_to_outtree import graph_to_outtree, tree_to_list_preorder
-from common import time_execution
 
 
 graph1: dict[str, list[str]] = {
@@ -32,7 +31,6 @@ test_cases = [
 ]
 
 
-@time_execution
 @pytest.mark.parametrize("test_input,expected", test_cases)
 def test_convert_to_outtree(test_input, expected):
     graph, root_val = test_input

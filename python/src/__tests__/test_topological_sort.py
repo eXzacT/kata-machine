@@ -1,6 +1,5 @@
 import pytest
 from src.topological_sort import topological_sort_dfs, topological_sort_dfs_v2, topological_sort_bfs
-from common import time_execution
 
 dag: dict[int, list[int]] = {
     0: [3, 6],
@@ -44,19 +43,16 @@ test_cases = [
 ]
 
 
-@time_execution
 @pytest.mark.parametrize("test_input,expected", test_cases)
 def test_topological_sort_dfs(test_input, expected):
     assert topological_sort_dfs(test_input) == expected
 
 
-@time_execution
 @pytest.mark.parametrize("test_input,expected", test_cases)
 def test_topological_sort_dfs_v2(test_input, expected):
     assert topological_sort_dfs_v2(test_input) == expected
 
 
-@time_execution
 @pytest.mark.parametrize("test_input,expected", test_cases)
 def test_topological_sort_bfs(test_input, expected):
     assert topological_sort_bfs(test_input) == expected

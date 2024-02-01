@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import os
 import shutil
 import sys
@@ -17,11 +18,12 @@ shutil.copy(template_src, src_path)
 shutil.copy(template_test, test_path)
 
 # Then replace "filename" with the argument that was passed
-with open(test_path, 'r+') as file:
-    file_contents = file.read()
-    file_contents = file_contents.replace("filename", filename_arg)
-    file.seek(0)
-    file.write(file_contents)
-    file.truncate()
+for fname in [src_path, test_path]:
+    with open(fname, 'r+') as file:
+        file_contents = file.read()
+        file_contents = file_contents.replace("filename", filename_arg)
+        file.seek(0)
+        file.write(file_contents)
+        file.truncate()
 
 print(f"Created {filename} in src and __tests__")
