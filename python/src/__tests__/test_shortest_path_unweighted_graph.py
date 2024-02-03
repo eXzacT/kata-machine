@@ -21,7 +21,7 @@ test_cases = [
     [(graph, 'A', 'K'), ['A', 'B', 'I', 'K']],
 ]
 
-functions = [globals()[name] for name in dir() if 'shortest' in name]
+functions = [globals()[name] for name in dir() if 'sol' in name]
 
 
 @pytest.mark.parametrize("test_input,expected", test_cases)

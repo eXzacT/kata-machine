@@ -9,7 +9,7 @@ else:
 
 
 @time_execution()
-def shortest_path_unweighted_graph_heap(adjacency_list: dict[str, list[str]], source: str, target: str) -> int:
+def sol_heap(adjacency_list: dict[str, list[str]], source: str, target: str) -> int:
     heap = []
     visited = set()
     heapq.heappush(heap, (0, source, [source]))
@@ -27,7 +27,7 @@ def shortest_path_unweighted_graph_heap(adjacency_list: dict[str, list[str]], so
 
 
 @time_execution()
-def shortest_path_unweighted_graph_bfs(adjacency_list: dict[str, list[str]], source: str, target: str) -> int:
+def sol_bfs(adjacency_list: dict[str, list[str]], source: str, target: str) -> int:
     queue = deque([source])
     prev = {}
     visited = set()
@@ -52,7 +52,7 @@ def shortest_path_unweighted_graph_bfs(adjacency_list: dict[str, list[str]], sou
 
 
 @time_execution()
-def shortest_path_unweighted_graph_bfs_v2(adjacency_list: dict[str, list[str]], source: str, target: str) -> int:
+def sol_bfs_v2(adjacency_list: dict[str, list[str]], source: str, target: str) -> int:
     queue = deque([(source, [source])])
     visited = set()
 
@@ -71,7 +71,7 @@ def shortest_path_unweighted_graph_bfs_v2(adjacency_list: dict[str, list[str]], 
 
 
 @time_execution()
-def shortest_path_unweighted_graph_nx(adjacency_list: dict[str, list[str]], source: str, target: str) -> int:
+def sol_nx(adjacency_list: dict[str, list[str]], source: str, target: str) -> int:
     G = nx.DiGraph()
     for V in adjacency_list:
         for E in adjacency_list[V]:
@@ -93,8 +93,3 @@ G: dict[str, list[str]] = {
     'J': ['F', 'K'],
     'K': ['I', 'J']
 }
-
-print(shortest_path_unweighted_graph_heap(G, "A", "K"))
-print(shortest_path_unweighted_graph_bfs(G, "A", "K"))
-print(shortest_path_unweighted_graph_bfs_v2(G, "A", "K"))
-print(shortest_path_unweighted_graph_nx(G, "A", "K"))
