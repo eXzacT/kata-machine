@@ -69,13 +69,68 @@ test_cases = [
     (([1, 2], 2), [2]),
 ]
 
-functions = [globals()[name] for name in dir() if 'remove' in name]
-
 
 @pytest.mark.parametrize("test_input,expected", test_cases)
 def test_remove_nth_from_the_back(test_input, expected):
     print(f"\nFor input {test_input}")
     l, k = test_input
     # Display as a list when given a head reference
-    for func in functions:
+    for func in [remove_nth_from_end_naive, remove_nth_from_end_optimized]:
         assert display(func(init_ll(l), k)) == expected
+
+
+# Second parameter says where the tail points to again
+test_cases = [
+    (([3, 2, 0, -4], 1), True),
+    (([1, 2], 0), True),
+    (([1, 2, 3, 4, 5], -1), False),
+    (([1, 2, 3, 4, 5, 4, 2, 3, 1], -1), False),
+]
+
+
+@pytest.mark.parametrize("test_input,expected", test_cases)
+def test_find_cycle(test_input, expected):
+    print(f"\nFor input {test_input}")
+    for func in [has_cycle_dict, has_cycle_floyd]:
+        assert func(init_ll_cycle(*test_input)) == expected
+
+
+# Second parameter says where the tail points to again
+test_cases = [
+    ([1, 2, 3, 4], [1, 4, 2, 3]),
+    ([1, 2, 3, 4, 5], [1, 5, 2, 4, 3]),
+    ([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], [1, 10, 2, 9, 3, 8, 4, 7, 5, 6]),
+]
+
+
+@pytest.mark.parametrize("test_input,expected", test_cases)
+def test_reorder_list(test_input, expected):
+    print(f"\nFor input {test_input}")
+    for func in [reorder_ll_stack, reorder_ll_rec, reorder_ll_reverse]:
+        head = init_ll(test_input)
+        func(head)
+        assert display(head) == expected
+
+
+def test_deep_copy():
+    print(f"\nFor input [[7,null],[13,0],[11,4],[10,2],[1,0]")
+    h1 = ListNodeRandom(7)
+    node1 = ListNodeRandom(13)
+    node2 = ListNodeRandom(11)
+    node3 = ListNodeRandom(10)
+    node4 = ListNodeRandom(1)
+
+    h1.nxt = node1
+    node1.nxt = node2
+    node2.nxt = node3
+    node3.nxt = node4
+
+    h1.random = None
+    node1.random = h1
+    node2.random = node4
+    node3.random = node2
+    node4.random = h1
+
+    h2 = deep_copy_random_list(h1)
+
+    assert h1 != h2 and h1.nxt.val == h2.nxt.val and h1.nxt != h2.nxt

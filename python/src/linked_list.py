@@ -69,7 +69,7 @@ def display(head: ListNode) -> list[Any]:
     return res
 
 
-def init_ll(vals: list[Any]) -> ListNode:
+def init_ll(vals: list[Any]) -> ListNode | None:
     if vals:
         head = ListNode(vals[0])
         curr = head
@@ -188,3 +188,175 @@ def remove_nth_from_end_optimized(head: ListNode, k: int) -> ListNode:
     left.nxt.nxt, left.nxt = None, left.nxt.nxt
 
     return dummy.nxt
+
+
+''' Given head, the head of a linked list, determine if the linked list has a cycle in it.
+    There is a cycle in a linked list if there is some node in the list that can be reached again. 
+
+    Return true if there is a cycle in the linked list. Otherwise, return false.'''
+
+
+def init_ll_cycle(vals: list[Any], tail_pointer: int) -> ListNode:
+    head = ListNode(vals[0])
+    tail = head
+    for i in range(1, len(vals)):
+        tail.nxt = ListNode(vals[i])
+        tail = tail.nxt
+
+    if tail_pointer != -1:  # If there's a cycle point the tail to node at tail_pointer idx
+        curr = head
+        for i in range(tail_pointer):
+            curr = curr.nxt
+
+        tail.nxt = curr
+
+    return head
+
+
+@time_execution()
+def has_cycle_dict(head: ListNode) -> bool:
+    curr = head
+    seen = set()
+
+    while curr:
+        if curr in seen:
+            return True
+
+        seen.add(curr)
+        curr = curr.nxt
+
+    return False
+
+
+@time_execution()
+def has_cycle_floyd(head: ListNode) -> bool:
+    slow = fast = head
+
+    while fast and fast.nxt:
+        slow = slow.nxt
+        fast = fast.nxt.nxt
+
+        if slow == fast:
+            return True
+
+    return False
+
+
+''' You are given the head of a singly linked-list. The list can be represented as:
+    L0 → L1 → … → Ln - 1 → Ln
+    Reorder the list to be on the following form:
+    L0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 → …
+    You may not modify the values in the list's nodes. Only nodes themselves may be changed.'''
+
+
+@time_execution()
+def reorder_ll_stack(head: ListNode) -> None:
+    stack = []
+    curr = head
+    while curr:
+        stack.append(curr)
+        curr = curr.nxt
+
+    for i in range(len(stack)//2):
+        temp = stack[i].nxt
+        stack[i].nxt = stack[-i-1]
+        stack[-i-1].nxt = temp
+
+    stack[len(stack)//2].nxt = None
+    return
+
+
+@time_execution()
+def reorder_ll_reverse(head: ListNode) -> None:
+    slow = head
+    fast = head.nxt
+    while fast and fast.nxt:  # First find the middle of the ll
+        slow = slow.nxt
+        fast = fast.nxt.nxt
+
+    # Reverse the right part, it starts at 1 position right of slow pointer
+    prev = None
+    right = slow.nxt
+    while right:
+        temp = right.nxt
+        right.nxt = prev
+        prev, right = right, temp
+
+    # Now merge them, take 1 from left then 1 from right, and move both pointers inwards
+    l, r = head, prev
+    while r:
+        temp_l, temp_r = l.nxt, r.nxt
+        l.nxt = r
+        r.nxt = temp_l
+        l, r = temp_l, temp_r
+
+    l.nxt = None  # Last left node will now point to None as it will become the last node
+    return
+
+
+@time_execution()
+def reorder_ll_rec(head: ListNode) -> None:
+    def helper(curr: ListNode) -> None:
+        if not curr:
+            return
+
+        helper(curr.nxt)
+        if not prev:
+            return
+        p = prev.pop()
+        if p == curr or p.nxt == curr:
+            curr.nxt = None
+            return
+
+        curr.nxt = p.nxt
+        prev.append(p.nxt)
+        p.nxt = curr
+
+    prev = [head]
+    helper(head)
+    return
+
+
+''' A linked list of length n is given such that each node contains an additional random pointer, which could point to any node or null. 
+    Construct a deep copy of the list. The deep copy should consist of exactly n brand new nodes, 
+    where each new node has its value set to the value of its corresponding original node. 
+    Both the next and random pointer of the new nodes should point to new nodes in the copied list such that the pointers 
+    in the original list and copied list represent the same list state. 
+    
+    None of the pointers in the new list should point to nodes in the original list.
+    For example, if there are two nodes X and Y in the original list, 
+    where X.random --> Y, then for the corresponding two nodes x and y in the copied list, x.random --> y.
+
+    Return the head of the copied linked list.'''
+
+
+class ListNodeRandom:
+    def __init__(self, val: int, nxt: 'ListNodeRandom' = None, random: 'ListNodeRandom' = None):
+        self.val = val
+        self.nxt = nxt
+        self.random = random
+
+    def __repr__(self) -> str:
+        return f"<ListNodeRandom val:{self.val}>"
+
+
+@time_execution()
+def deep_copy_random_list(head: ListNodeRandom) -> ListNodeRandom:
+    # Because there might be some .random that point to None
+    old: dict[int, ListNodeRandom] = {None: None}
+
+    curr = head
+    while curr:  # Initialize a new copy for each node, we can't use next or random yet because those nodes might not exist for the moment
+        copy = ListNodeRandom(curr.val)
+        old[curr] = copy
+        curr = curr.nxt
+
+    # Now we can set the next and random pointers
+    curr = head
+    while curr:
+        copy = old[curr]
+        copy.nxt = old[curr.nxt]
+        copy.random = old[curr.random]
+        curr = curr.nxt
+
+    return old[head]
