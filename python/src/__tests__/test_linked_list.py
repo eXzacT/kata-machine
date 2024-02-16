@@ -134,3 +134,37 @@ def test_deep_copy():
     h2 = deep_copy_random_list(h1)
 
     assert h1 != h2 and h1.nxt.val == h2.nxt.val and h1.nxt != h2.nxt
+
+
+test_cases = [
+    ([[1, 4, 5], [1, 3, 4], [2, 6]], [1, 1, 2, 3, 4, 4, 5, 6]),
+    ([[1, 4, 7, 9, 10], [11, 12, 13, 17], [19, 20, 23, 24]],
+     [1, 4, 7, 9, 10, 11, 12, 13, 17, 19, 20, 23, 24]),
+    ([], []),
+    ([[]], []),
+]
+
+
+@pytest.mark.parametrize("test_input,expected", test_cases)
+def test_merge_k_lists(test_input, expected):
+    print(f"\nFor input {test_input}")
+    for func in [merge_k_lists_sort, merge_k_lists_v1, merge_k_lists_v2, merge_k_lists_v3]:
+        ll_heads = [init_ll(l) for l in test_input]
+        assert display(func(ll_heads)) == expected
+
+
+test_cases = [
+    (([1, 2, 3, 4, 5], 2), [2, 1, 4, 3, 5]),
+    (([1, 2, 3, 4, 5], 3), [3, 2, 1, 4, 5]),
+    (([1, 2], 2), [2, 1]),
+    (([1, 2, 3, 4, 5], 1), [1, 2, 3, 4, 5]),
+    (([1, 2, 3, 4], 2), [2, 1, 4, 3]),
+]
+
+
+@pytest.mark.parametrize("test_input,expected", test_cases)
+def test_reverse_k_group(test_input, expected):
+    print(f"\nFor input {test_input}")
+    l, k = test_input
+    for func in [reverse_k_group_stack, reverse_k_group_backtrack, reverse_k_group_space_optimized]:
+        assert display(func(init_ll(l), k)) == expected

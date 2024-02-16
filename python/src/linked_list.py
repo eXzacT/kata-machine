@@ -360,3 +360,197 @@ def deep_copy_random_list(head: ListNodeRandom) -> ListNodeRandom:
         curr = curr.nxt
 
     return old[head]
+
+
+''' You are given an array of k linked-lists lists, each linked-list is sorted in ascending order.
+    Merge all the linked-lists into one sorted linked-list and return it.'''
+
+
+@time_execution()
+def merge_k_lists_sort(lists: list[ListNode]) -> ListNode:
+    dummy = ListNode()
+    stack = []
+
+    for head in lists:
+        while head:
+            stack.append(head.val)
+            head = head.nxt
+
+    tail = dummy
+    for val in sorted(stack):
+        tail.nxt = ListNode(val)
+        tail = tail.nxt
+
+    return dummy.nxt
+
+
+@time_execution(executions=1)  # 1 execution because mutating lists
+def merge_k_lists_v1(lists: list[ListNode]) -> ListNode:
+    dummy = ListNode()
+    tail = dummy
+
+    while any(lists):
+        _, idx = min((curr.val, idx) for idx, curr in enumerate(lists) if curr)
+        tail.nxt = lists[idx]
+        tail = tail.nxt
+        lists[idx] = lists[idx].nxt
+
+    return dummy.nxt
+
+
+@time_execution(executions=1)  # 1 execution because mutating lists
+def merge_k_lists_v2(lists: list[ListNode]) -> ListNode:
+    if not lists or len(lists) == 0:
+        return None
+
+    merged = None
+    for i in range(len(lists)):
+        merged = merge_two_sorted_lls(merged, lists[i])
+
+    return merged
+
+
+@time_execution(executions=1)  # 1 execution because mutating lists
+def merge_k_lists_v3(lists: list[ListNode]) -> ListNode:
+    if not lists or len(lists) == 0:
+        return None
+
+    while len(lists) > 1:
+        merged = []
+        for i in range(0, len(lists), 2):
+            l1 = lists[i]
+            # Could be out of range if uneven number
+            l2 = lists[i+1] if i+1 < len(lists) else None
+            merged.append(merge_two_sorted_lls(l1, l2))
+
+        lists = merged
+
+    return lists[0]
+
+
+''' Given the head of a linked list, reverse the nodes of the list k at a time, and return the modified list.
+    'k' is a positive integer and is less than or equal to the length of the linked list. 
+    If the number of nodes is not a multiple of k then left-out nodes, in the end, should remain as it is.
+
+    You may not alter the values in the list's nodes, only nodes themselves may be changed.'''
+
+
+@time_execution(executions=1)  # 1 execution because mutating the list
+def reverse_k_group_backtrack(head: ListNode, k: int) -> ListNode:
+    ''' Yes I am aware the code is very confusing, just wanted to do it using backtracking as practice'''
+    def helper(prev: ListNode | None, curr: ListNode | None, length: int) -> ListNode | None:
+        nonlocal steps, saved_next, remainder, potential_head, same_length_as_k, last_k_group
+        if not curr:
+            remainder = length % k
+            same_length_as_k = length == k
+            return
+
+        helper(curr, curr.nxt, length+1)  # Traverse and find length
+
+        if same_length_as_k:  # Just reverse entire list
+            # If first time setting then the head will be last element(which is curr at this time)
+            potential_head = potential_head if potential_head else curr
+            curr.nxt = prev
+            return
+
+        # Backtrack, start changing nodes since there's no remaining portion
+        if not remainder:
+            if not saved_next:  # At the end of a k-group, have to remember where the end points
+                # If potential head exists it means we already reversed some part
+                # Because of that the node on the right is no longer curr.nxt but the ending of that k-group
+                # And the ending of every k-group is always the potential head
+                saved_next = potential_head if potential_head else curr.nxt if curr.nxt else curr
+                # EDGE CASE 1, we have to set the nxt to be curr since there is no next
+                # This edge case happens when the length is not equal to k but it's a multiple of k
+                # Using this boolean flag once to set the first element in that last k-group to point to nothing
+                if not curr.nxt:
+                    last_k_group = True
+                # The last element of a k-group is the new head if it's at the beginning
+                potential_head = curr
+
+            steps += 1
+            if steps == k:  # At the beginning of a k-group
+                # The first node in the k-group will now point where the end was pointing
+                if last_k_group:  # EDGE CASE 1
+                    curr.nxt = None  # We can't set it to saved_next because it would go in circles
+                    last_k_group = False
+                else:
+                    curr.nxt = saved_next
+
+                steps = 0
+                saved_next = None
+            else:  # Somewhere in the middle of a k-group, just increment steps and reverse current
+                curr.nxt = prev
+        else:
+            remainder -= 1
+
+    # Edge cases
+    if k == 1:  # Don't reverse
+        return head
+
+    steps = 0
+    remainder = None
+    saved_next = None
+    potential_head = None
+    same_length_as_k = False
+    last_k_group = False
+
+    helper(None, head, 0)
+    return potential_head
+
+
+@time_execution(executions=1)  # 1 execution because mutating the list
+def reverse_k_group_stack(head: ListNode, k: int) -> ListNode:
+    if k == 1:
+        return head
+
+    stack = []
+    curr = head
+    while curr:
+        stack.append(curr)
+        curr = curr.nxt
+
+    # Skipping remainder, example k=3 but len is 5, leave 4 and 5 intact
+    remainder = len(stack) % k
+    for i in range(len(stack)-remainder):
+        if i % k:  # Not the beginning of a k-group
+            stack[i].nxt = stack[i-1]
+        else:  # Beginning of a k-group
+            stack[i].nxt = stack[i+2*k-1] if i+2*k - 1 < len(stack)\
+                else None if not remainder else stack[-remainder]
+
+    # We swapped first with k-1th node so that one is now head
+    return stack[k-1]
+
+
+@time_execution(executions=1)  # 1 execution because mutating the list
+def reverse_k_group_space_optimized(head: ListNode, k: int) -> ListNode:
+    if k == 1:
+        return head
+
+    dummy = ListNode(0, head)
+    prev_group_end = dummy
+
+    while True:
+        # Check if there are at least k nodes left to reverse
+        kth_node = prev_group_end
+        for _ in range(k):
+            kth_node = kth_node.nxt
+            if not kth_node:
+                return dummy.nxt
+
+        group_start = prev_group_end.nxt
+        next_group_start = kth_node.nxt
+
+        # Reverse the current group of k nodes
+        prev = next_group_start
+        current = group_start
+
+        for _ in range(k):
+            temp = current.nxt
+            current.nxt = prev
+            prev, current = current, temp
+
+        # Connect the previous group with the reversed group
+        prev_group_end.nxt = prev
+        prev_group_end = group_start
