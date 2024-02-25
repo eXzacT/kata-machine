@@ -166,5 +166,5 @@ test_cases = [
 def test_reverse_k_group(test_input, expected):
     print(f"\nFor input {test_input}")
     l, k = test_input
-    for func in [reverse_k_group_stack, reverse_k_group_backtrack, reverse_k_group_space_optimized]:
+    for func in [reverse_k_group_stack, reverse_k_group_backtrack, reverse_k_group_space_optimized, reverse_k_group_space_optimized_v2]:
         assert display(func(init_ll(l), k)) == expected

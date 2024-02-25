@@ -554,3 +554,29 @@ def reverse_k_group_space_optimized(head: ListNode, k: int) -> ListNode:
         # Connect the previous group with the reversed group
         prev_group_end.nxt = prev
         prev_group_end = group_start
+
+
+@time_execution(executions=1)  # 1 execution because mutating the list
+def reverse_k_group_space_optimized_v2(head: ListNode, k: int) -> ListNode:
+    if k == 1:
+        return head
+
+    prev_group_end = dummy = ListNode(0, head)
+    l = r = head
+    steps = 0
+
+    while r:
+        r = r.nxt
+        steps += 1
+        if steps % k == 0:
+            prev = r
+            group_start = l
+            while r != l:
+                temp = l.nxt
+                l.nxt = prev
+                l, prev = temp, l
+
+            prev_group_end.nxt = prev
+            prev_group_end = group_start
+
+    return dummy.nxt
