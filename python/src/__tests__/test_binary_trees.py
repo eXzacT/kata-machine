@@ -131,3 +131,49 @@ def test_lowest_common_ancestor(test_input, expected):
 
     for func in [level_order_traversal_iter, level_order_traversal_rec]:
         assert func(create(test_input)) == expected
+
+
+test_cases = [
+    ([1, 2, 3, None, 5, None, 4], [1, 3, 4]),
+    ([1, None, 3], [1, 3]),
+    ([1, 2, 3, 4], [1, 3, 4]),
+    ([], []),
+]
+
+
+@pytest.mark.parametrize("test_input,expected", test_cases)
+def test_right_side_view(test_input, expected):
+    print(f"\nFor input {test_input}")
+
+    for func in [right_side_view_bfs, right_side_view_dfs]:
+        assert func(create(test_input)) == expected
+
+
+test_cases = [
+    ([3, 1, 4, 3, None, 1, 5], 4),
+    ([3, 3, None, 4, 2], 3),
+    ([1], 1)
+]
+
+
+@pytest.mark.parametrize("test_input,expected", test_cases)
+def test_good_nodes(test_input, expected):
+    print(f"\nFor input {test_input}")
+
+    for func in [good_nodes_dfs, good_nodes_dfs_v2]:
+        assert func(create(test_input)) == expected
+
+
+test_cases = [
+    ([2, 1, 3], True),
+    ([5, 1, 4, None, None, 3, 6], False),
+    ([5, 4, 6, None, None, 3, 7], False),
+]
+
+
+@pytest.mark.parametrize("test_input,expected", test_cases)
+def test_good_nodes(test_input, expected):
+    print(f"\nFor input {test_input}")
+
+    for func in [validate_binary_search_tree]:
+        assert func(create(test_input)) == expected

@@ -485,3 +485,105 @@ def level_order_traversal_rec(root: TreeNode) -> list[list[int]]:
 
     helper(root, 0)
     return res
+
+
+''' Given the root of a binary tree, imagine yourself standing on the right side of it, 
+    return the values of the nodes you can see ordered from top to bottom. Basically rightmost nodes on every level'''
+
+
+@time_execution()
+def right_side_view_bfs(root: TreeNode) -> list[int]:
+    res = []
+    if not root:
+        return res
+
+    queue = deque([root])
+    while queue:
+        queue_len = len(queue)
+        for i in range(queue_len):
+            curr = queue.popleft()
+            if curr.left:
+                queue.append(curr.left)
+            if curr.right:
+                queue.append(curr.right)
+
+            if i == queue_len-1:  # Rightmost node in a level
+                res.append(curr.val)
+
+    return res
+
+
+@time_execution()
+def right_side_view_dfs(root: TreeNode) -> list[int]:
+    res = []
+
+    def helper(curr: TreeNode, level: int) -> None:
+        if not curr:
+            return
+        if level == len(res):
+            # Since we reached the new level just add whatever the node is, it can be a left node if there's no right
+            res.append(curr.val)
+
+        # Go right first to prioritize rightmost nodes
+        helper(curr.right, level + 1)
+        helper(curr.left, level + 1)
+
+    helper(root, 0)
+    return res
+
+
+''' Given a binary tree root, a node X in the tree is named good if in the path from root to X there are 
+    no nodes with a value greater than X.
+    Return the number of good nodes in the binary tree.'''
+
+
+@time_execution()
+def good_nodes_dfs(root: TreeNode) -> int:
+    def helper(curr: TreeNode, count: int, max_val: int) -> int:
+        if not curr:
+            return count
+
+        if curr.val >= max_val:
+            count += 1
+            max_val = curr.val
+
+        # Subtracting current count so we don't count it twice, since both paths have that count in them
+        return helper(curr.left, count, max_val) + helper(curr.right, count, max_val) - count
+
+    return helper(root, 0, root.val)
+
+
+@time_execution()
+def good_nodes_dfs_v2(root: TreeNode) -> int:
+    def helper(curr: TreeNode, max_val: int) -> int:
+        if not curr:
+            return 0
+
+        if curr.val >= max_val:
+            return 1+helper(curr.left, curr.val)+helper(curr.right, curr.val)
+
+        return helper(curr.left, max_val)+helper(curr.right, max_val)
+
+    return helper(root, root.val)
+
+
+''' Given the root of a binary tree, determine if it is a valid binary search tree (BST).
+
+    A valid BST is defined as follows:
+
+        The left subtree of a node contains only nodes with keys less than the node's key.
+        The right subtree of a node contains only nodes with keys greater than the node's key.
+        Both the left and right subtrees must also be binary search trees.'''
+
+
+@time_execution()
+def validate_binary_search_tree(root: TreeNode) -> bool:
+    def helper(curr: TreeNode, min_val: int, max_val: int) -> bool:
+        if not curr:
+            return True
+
+        if min_val < curr.val < max_val:
+            return helper(curr.left, min_val, curr.val) and helper(curr.right, curr.val, max_val)
+        return False
+
+    return helper(root, float('-inf'), float('inf'))
