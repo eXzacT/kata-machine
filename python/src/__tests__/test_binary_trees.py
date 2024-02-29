@@ -177,3 +177,74 @@ def test_good_nodes(test_input, expected):
 
     for func in [validate_binary_search_tree]:
         assert func(create(test_input)) == expected
+
+
+test_cases = [
+    (([3, 1, 4, None, 2], 1), 1),
+    (([5, 3, 6, 2, 4, None, None, 1], 3), 3),
+]
+
+
+@pytest.mark.parametrize("test_input,expected", test_cases)
+def test_good_nodes(test_input, expected):
+    print(f"\nFor input {test_input}")
+    l, k = test_input
+    tree = create(l)
+
+    for func in [kth_smallest_inorder_dfs, kth_smallest_inorder_dfs_v2, kth_smallest_inorder_iter]:
+        assert func(tree, k) == expected
+
+
+test_cases = [
+    (([3, 9, 20, 15, 7], [9, 3, 15, 20, 7]), [3, 9, 20, None, None, 15, 7]),
+    (([-1], [-1]), [-1]),
+    (([1, 2], [2, 1]), [1, 2]),
+    (([1, 2, 3], [3, 2, 1]), [1, 2, None, 3]),
+]
+
+
+@pytest.mark.parametrize("test_input,expected", test_cases)
+def test_build_from_inorder_postorder(test_input, expected):
+    print(f"\nFor input {test_input}")
+    for func in [build_from_preorder_inorder, build_from_preorder_inorder_optimized]:
+        assert display(func(*test_input)) == expected
+
+
+test_cases = [
+    ([1, 2, 3], 6),
+    ([-10, 9, 20, None, None, 15, 7], 42),
+    ([-1, -2, 10, -6, None, -3, -6], 10),
+    ([-3], -3),
+    ([1, -2, 3], 4),
+    ([5, 4, 8, 11, None, 13, 4, 7, 2, None, None, None, 1], 48),
+]
+
+
+@pytest.mark.parametrize("test_input,expected", test_cases)
+def test_max_path_sum(test_input, expected):
+    print(f"\nFor input {test_input}")
+    assert max_path_sum(create(test_input)) == expected
+
+
+test_cases = [
+    ([1, 2, 3, None, None, 4, 5], "[1, 2, 3, None, None, 4, 5]")
+]
+
+
+@pytest.mark.parametrize("test_input,expected", test_cases)
+def test_serialize(test_input, expected):
+    print(f"\nFor input {test_input}")
+    assert serialize_binary_tree(create(test_input)) == expected
+
+
+test_cases = [
+    ("[1, 2, 3, None, None, 4, 5]", [1, 2, 3, None, None, 4, 5]),
+    ("[1, 2, -3, None, None, 4, 5]", [1, 2, -3, None, None, 4, 5])
+]
+
+
+@pytest.mark.parametrize("test_input,expected", test_cases)
+def test_deserialize(test_input, expected):
+    print(f"\nFor input {test_input}")
+    assert display(deserialize_binary_tree(test_input)
+                   ) == display(create(expected))

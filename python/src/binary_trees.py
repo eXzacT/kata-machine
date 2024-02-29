@@ -1,3 +1,4 @@
+import re
 from collections import deque
 if __name__ == "__main__":
     from common import time_execution
@@ -39,11 +40,16 @@ def display(head: TreeNode) -> list:
     while queue:
         curr = queue.popleft()
         if not curr:
+            bfs.append(None)
             continue
 
         bfs.append(curr.val)
         queue.append(curr.left)
         queue.append(curr.right)
+
+    # Removing ending Nones
+    while bfs and bfs[-1] == None:
+        bfs.pop()
 
     return bfs
 
@@ -587,3 +593,163 @@ def validate_binary_search_tree(root: TreeNode) -> bool:
         return False
 
     return helper(root, float('-inf'), float('inf'))
+
+
+'''Given the root of a binary search tree, and an integer k, return the kth smallest value (1-indexed) of all the values of the nodes in the tree.'''
+
+
+@time_execution()
+def kth_smallest_inorder_dfs(root: TreeNode, k: int) -> int:
+    res = []
+
+    def helper(curr: TreeNode) -> None:
+        if not curr:
+            return
+
+        helper(curr.left)
+        res.append(curr.val)
+        helper(curr.right)
+
+    helper(root)
+    return res[k-1]
+
+
+@time_execution()
+def kth_smallest_inorder_dfs_v2(root: TreeNode, k: int) -> int:
+    steps = 0
+    res = None
+
+    def helper(curr: TreeNode):
+        nonlocal steps, res
+        if not curr or res is not None:  # Already found the result or empty node
+            return
+
+        helper(curr.left)
+        steps += 1
+
+        if steps == k:
+            res = curr.val
+            return
+        helper(curr.right)
+
+    helper(root)
+    return res
+
+
+@time_execution()
+def kth_smallest_inorder_iter(root: TreeNode, k: int) -> int:
+    steps = 0
+    stack = []
+    curr = root
+
+    while curr or stack:
+        while curr:  # Keep going left and remember which node we visited
+            stack.append(curr)
+            curr = curr.left
+
+        # Once we're done going left process the node
+        curr = stack.pop()
+        steps += 1
+        if steps == k:
+            return curr.val
+
+        # After processing we can go right
+        curr = curr.right
+
+
+''' Given two integer arrays preorder and inorder where preorder is the preorder traversal of a binary tree and 
+    inorder is the inorder traversal of the same tree, construct and return the binary tree.'''
+
+
+@time_execution()
+def build_from_preorder_inorder(preorder: list[int], inorder: list[int]) -> TreeNode:
+    def helper(preorder: list[int], inorder: list[int]) -> TreeNode:
+        if not preorder or not inorder:
+            return None
+
+        root = TreeNode(preorder[0])
+        mid = inorder.index(preorder[0])
+        root.left = helper(preorder[1:mid+1], inorder[:mid])
+        root.right = helper(preorder[mid+1:], inorder[mid+1:])
+
+        return root
+
+    return helper(preorder, inorder)
+
+
+@time_execution()
+def build_from_preorder_inorder_optimized(preorder: list[int], inorder: list[int]) -> TreeNode:
+    if not preorder or not inorder:
+        return None
+
+    # Mapping of inorder values to their indices for quick access
+    inorder_map = {val: idx for idx, val in enumerate(inorder)}
+    next_idx = 0
+
+    def helper(start: int, end: int) -> TreeNode:
+        nonlocal next_idx
+        if start > end:
+            return None
+
+        # Get the current root value and create the TreeNode
+        root = TreeNode(preorder[next_idx])
+        next_idx += 1
+        mid = inorder_map[root.val]
+
+        # Recursively construct the left and right subtree
+        root.left = helper(start, mid - 1)
+        root.right = helper(mid + 1, end)
+
+        return root
+
+    return helper(0, len(inorder) - 1)
+
+
+''' A path in a binary tree is a sequence of nodes where each pair of adjacent nodes in the sequence has an edge connecting them. 
+    A node can only appear in the sequence at most once. Note that the path does not need to pass through the root.
+    The path sum of a path is the sum of the node's values in the path.
+    Given the root of a binary tree, return the maximum path sum of any non-empty path.'''
+
+
+@time_execution()
+def max_path_sum(root: TreeNode) -> int:
+    res = root.val
+
+    def helper(curr: TreeNode) -> int:
+        nonlocal res
+        if not curr:
+            return 0
+
+        max_left = helper(curr.left)
+        max_right = helper(curr.right)
+        # Keep them neutral if it's negative, because we don't need to take children nodes into path
+        max_left = max(max_left, 0)
+        max_right = max(max_right, 0)
+
+        # It's possible that path from left to right node through the current one is best
+        # But we can't return that value since that path can't go to the parent of current node
+        res = max(res, max_left+max_right+curr.val)
+
+        # Is it better to take the left path or right path?
+        best_path = max(max_left, max_right)+curr.val
+        return best_path
+
+    helper(root)
+    return res
+
+
+''' Serialization is the process of converting a data structure or object into a sequence of bits so that it can be stored 
+    in a file or memory buffer, or transmitted across a network connection link to be reconstructed later in the same or another computer environment.
+
+    Design an algorithm to serialize and deserialize a binary tree. There is no restriction on how your serialization/deserialization algorithm should work. 
+    You just need to ensure that a binary tree can be serialized to a string and this string can be deserialized to the original tree structure.'''
+
+
+@time_execution()
+def serialize_binary_tree(root: TreeNode) -> str:
+    return str(display(root))
+
+
+@time_execution()
+def deserialize_binary_tree(data: str) -> TreeNode:
+    return create([int(val) if val.lstrip('-').isdigit() else None for val in re.findall(r'-?\d+|None', data)])
